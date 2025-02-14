@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2023 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -32,6 +32,9 @@ namespace ShareX.HelpersLib
 {
     public partial class GradientPickerForm : Form
     {
+        public delegate void GradientChangedEventHandler();
+        public event GradientChangedEventHandler GradientChanged;
+
         public GradientInfo Gradient { get; private set; }
 
         private bool isReady;
@@ -41,11 +44,16 @@ namespace ShareX.HelpersLib
             Gradient = gradient;
 
             InitializeComponent();
-            ShareXResources.ApplyTheme(this);
+            ShareXResources.ApplyTheme(this, true);
 
             cbGradientType.Items.AddRange(Helpers.GetLocalizedEnumDescriptions<LinearGradientMode>());
             cbGradientType.SelectedIndex = (int)Gradient.Type;
             UpdateGradientList(true);
+        }
+
+        protected virtual void OnGradientChanged()
+        {
+            GradientChanged?.Invoke();
         }
 
         private void AddPresets()
@@ -497,6 +505,8 @@ namespace ShareX.HelpersLib
                 Bitmap bmp = Gradient.CreateGradientPreview(pbPreview.ClientRectangle.Width, pbPreview.ClientRectangle.Height, true);
                 pbPreview.Image?.Dispose();
                 pbPreview.Image = bmp;
+
+                OnGradientChanged();
             }
         }
 

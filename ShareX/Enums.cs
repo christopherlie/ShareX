@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2023 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -42,9 +42,18 @@ namespace ShareX
         Unknown
     }
 
+    public enum UpdateChannel // Localized
+    {
+        Release,
+        PreRelease,
+        Dev
+    }
+
     public enum SupportedLanguage
     {
         Automatic, // Localized
+        [Description("العربية (Arabic)")]
+        Arabic,
         [Description("Nederlands (Dutch)")]
         Dutch,
         [Description("English")]
@@ -123,23 +132,24 @@ namespace ShareX
         None = 0,
         ShowQuickTaskMenu = 1,
         ShowAfterCaptureWindow = 1 << 1,
-        AddImageEffects = 1 << 2,
-        AnnotateImage = 1 << 3,
-        CopyImageToClipboard = 1 << 4,
-        PinToScreen = 1 << 5,
-        SendImageToPrinter = 1 << 6,
-        SaveImageToFile = 1 << 7,
-        SaveImageToFileWithDialog = 1 << 8,
-        SaveThumbnailImageToFile = 1 << 9,
-        PerformActions = 1 << 10,
-        CopyFileToClipboard = 1 << 11,
-        CopyFilePathToClipboard = 1 << 12,
-        ShowInExplorer = 1 << 13,
-        ScanQRCode = 1 << 14,
-        DoOCR = 1 << 15,
-        ShowBeforeUploadWindow = 1 << 16,
-        UploadImageToHost = 1 << 17,
-        DeleteFile = 1 << 18
+        BeautifyImage = 1 << 2,
+        AddImageEffects = 1 << 3,
+        AnnotateImage = 1 << 4,
+        CopyImageToClipboard = 1 << 5,
+        PinToScreen = 1 << 6,
+        SendImageToPrinter = 1 << 7,
+        SaveImageToFile = 1 << 8,
+        SaveImageToFileWithDialog = 1 << 9,
+        SaveThumbnailImageToFile = 1 << 10,
+        PerformActions = 1 << 11,
+        CopyFileToClipboard = 1 << 12,
+        CopyFilePathToClipboard = 1 << 13,
+        ShowInExplorer = 1 << 14,
+        ScanQRCode = 1 << 15,
+        DoOCR = 1 << 16,
+        ShowBeforeUploadWindow = 1 << 17,
+        UploadImageToHost = 1 << 18,
+        DeleteFile = 1 << 19
     }
 
     [Flags]
@@ -204,6 +214,8 @@ namespace ShareX
         [Category(EnumExtensions.HotkeyType_Category_ScreenCapture)]
         ActiveWindow,
         [Category(EnumExtensions.HotkeyType_Category_ScreenCapture)]
+        CustomWindow,
+        [Category(EnumExtensions.HotkeyType_Category_ScreenCapture)]
         ActiveMonitor,
         [Category(EnumExtensions.HotkeyType_Category_ScreenCapture)]
         RectangleRegion,
@@ -260,6 +272,8 @@ namespace ShareX
         [Category(EnumExtensions.HotkeyType_Category_Tools)]
         PinToScreenFromFile,
         [Category(EnumExtensions.HotkeyType_Category_Tools)]
+        PinToScreenCloseAll,
+        [Category(EnumExtensions.HotkeyType_Category_Tools)]
         ImageEditor,
         [Category(EnumExtensions.HotkeyType_Category_Tools)]
         ImageBeautifier,
@@ -292,6 +306,10 @@ namespace ShareX
         [Category(EnumExtensions.HotkeyType_Category_Tools)]
         BorderlessWindow,
         [Category(EnumExtensions.HotkeyType_Category_Tools)]
+        ActiveWindowBorderless,
+        [Category(EnumExtensions.HotkeyType_Category_Tools)]
+        ActiveWindowTopMost,
+        [Category(EnumExtensions.HotkeyType_Category_Tools)]
         InspectWindow,
         [Category(EnumExtensions.HotkeyType_Category_Tools)]
         MonitorTest,
@@ -314,13 +332,6 @@ namespace ShareX
         ToggleTrayMenu,
         [Category(EnumExtensions.HotkeyType_Category_Other)]
         ExitShareX
-    }
-
-    public enum PopUpNotificationType // Localized
-    {
-        None,
-        BalloonTip,
-        ToastNotification
     }
 
     public enum ToastClickAction // Localized
@@ -408,5 +419,23 @@ namespace ShareX
     {
         ListView,
         ThumbnailView
+    }
+
+    public enum NativeMessagingAction
+    {
+        None,
+        UploadImage,
+        UploadVideo,
+        UploadAudio,
+        UploadText,
+        ShortenURL
+    }
+
+    public enum NotificationSound
+    {
+        Capture,
+        TaskCompleted,
+        ActionCompleted,
+        Error
     }
 }
