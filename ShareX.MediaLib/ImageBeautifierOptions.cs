@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2023 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -26,92 +26,45 @@
 using ShareX.HelpersLib;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ShareX.MediaLib
 {
     public class ImageBeautifierOptions
     {
-        public int Margin { get; set; } = 80;
-        public int Padding { get; set; } = 40;
-        public bool SmartPadding { get; set; } = true;
-        public int RoundedCorner { get; set; } = 20;
-        public int ShadowSize { get; set; } = 30;
-        public ImageBeautifierBackgroundType BackgroundType { get; set; } = ImageBeautifierBackgroundType.Gradient;
-        public GradientInfo BackgroundGradient { get; set; } = new GradientInfo(LinearGradientMode.ForwardDiagonal, Color.FromArgb(255, 81, 47), Color.FromArgb(221, 36, 118));
-        public Color BackgroundColor { get; set; } = Color.FromArgb(34, 34, 34);
-        public string BackgroundImageFilePath { get; set; } = "";
+        public int Margin { get; set; }
+        public int Padding { get; set; }
+        public bool SmartPadding { get; set; }
+        public int RoundedCorner { get; set; }
+        public int ShadowRadius { get; set; }
+        public int ShadowOpacity { get; set; }
+        public int ShadowDistance { get; set; }
+        public int ShadowAngle { get; set; }
+        public Color ShadowColor { get; set; }
+        public ImageBeautifierBackgroundType BackgroundType { get; set; }
+        public GradientInfo BackgroundGradient { get; set; }
+        public Color BackgroundColor { get; set; }
+        public string BackgroundImageFilePath { get; set; }
 
-        public Bitmap Render(Bitmap image)
+        public ImageBeautifierOptions()
         {
-            Bitmap resultImage = (Bitmap)image.Clone();
-
-            if (SmartPadding)
-            {
-                resultImage = ImageHelpers.AutoCropImage(resultImage, true, AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, Padding);
-            }
-            else if (Padding > 0)
-            {
-                Color color = resultImage.GetPixel(0, 0);
-                Bitmap resultImageNew = ImageHelpers.AddCanvas(resultImage, Padding, color);
-                resultImage.Dispose();
-                resultImage = resultImageNew;
-            }
-
-            if (RoundedCorner > 0)
-            {
-                resultImage = ImageHelpers.RoundedCorners(resultImage, RoundedCorner);
-            }
-
-            if (Margin > 0)
-            {
-                Bitmap resultImageNew = ImageHelpers.AddCanvas(resultImage, Margin);
-                resultImage.Dispose();
-                resultImage = resultImageNew;
-            }
-
-            if (ShadowSize > 0)
-            {
-                resultImage = ImageHelpers.AddShadow(resultImage, 1f, ShadowSize, 0f, Color.Black, new Point(0, 0), false);
-            }
-
-            switch (BackgroundType)
-            {
-                case ImageBeautifierBackgroundType.Gradient:
-                    if (BackgroundGradient != null && BackgroundGradient.IsVisible)
-                    {
-                        Bitmap resultImageNew = ImageHelpers.FillBackground(resultImage, BackgroundGradient);
-                        resultImage.Dispose();
-                        resultImage = resultImageNew;
-                    }
-                    break;
-                case ImageBeautifierBackgroundType.Color:
-                    if (!BackgroundColor.IsTransparent())
-                    {
-                        Bitmap resultImageNew = ImageHelpers.FillBackground(resultImage, BackgroundColor);
-                        resultImage.Dispose();
-                        resultImage = resultImageNew;
-                    }
-                    break;
-                case ImageBeautifierBackgroundType.Image:
-                    resultImage = ImageHelpers.DrawBackgroundImage(resultImage, BackgroundImageFilePath);
-                    break;
-                case ImageBeautifierBackgroundType.Desktop:
-                    string desktopWallpaperFilePath = Helpers.GetDesktopWallpaperFilePath();
-                    resultImage = ImageHelpers.DrawBackgroundImage(resultImage, desktopWallpaperFilePath);
-                    break;
-                default:
-                case ImageBeautifierBackgroundType.Transparent:
-                    break;
-            }
-
-            return resultImage;
+            ResetOptions();
         }
 
-        public async Task<Bitmap> RenderAsync(Bitmap image)
+        public void ResetOptions()
         {
-            return await Task.Run(() => Render(image));
+            Margin = 80;
+            Padding = 40;
+            SmartPadding = true;
+            RoundedCorner = 20;
+            ShadowRadius = 30;
+            ShadowOpacity = 80;
+            ShadowDistance = 10;
+            ShadowAngle = 180;
+            ShadowColor = Color.Black;
+            BackgroundType = ImageBeautifierBackgroundType.Gradient;
+            BackgroundGradient = new GradientInfo(LinearGradientMode.ForwardDiagonal, Color.FromArgb(255, 81, 47), Color.FromArgb(221, 36, 118));
+            BackgroundColor = Color.FromArgb(34, 34, 34);
+            BackgroundImageFilePath = "";
         }
     }
 }
